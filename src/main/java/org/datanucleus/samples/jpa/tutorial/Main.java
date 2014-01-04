@@ -18,8 +18,10 @@ Contributors:
 package org.datanucleus.samples.jpa.tutorial;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -40,6 +42,10 @@ public class Main
     public static void main(String args[])
     {
     	EntityDataService eds = new EntityDataService();
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	map.put("ProductSerial", "sdfsdfsdf");
+    	map.put("user.id", 1);
+    	eds.insertByMap("warranty", map);
     	/*
         // Perform a retrieve of the Inventory and detach it (by closing the EM)
         em = emf.createEntityManager();

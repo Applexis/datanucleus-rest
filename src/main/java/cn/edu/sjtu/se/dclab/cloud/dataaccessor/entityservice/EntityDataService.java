@@ -39,21 +39,12 @@ import org.datanucleus.util.NucleusLogger;
  * Function: TODO ADD FUNCTION. <br/>
  * Reason:	 TODO ADD REASON. <br/>
  * Date:     2013-12-7 下午3:17:23 <br/>
- * @author   TomasLiu
+ * @author   TomasLiu, ApplexCao
  * @version  
  * @since    JDK 1.6
  * @see 	 
  */
-/**
- * ClassName: EntityDataService <br/>
- * Function: TODO ADD FUNCTION. <br/>
- * Reason: TODO ADD REASON(可�?). <br/>
- * date: 2013-12-7 下午3:17:23 <br/>
- * 
- * @author TomasLiu
- * @version
- * @since JDK 1.6
- */
+
 public class EntityDataService {
 
 	private EntityManagerFactory emf;
@@ -68,6 +59,16 @@ public class EntityDataService {
 		contextManager = new ContextManager();
 	}
 
+	public Boolean insertByMap(String className, Map<String, Object> map) {
+		try {
+			return insertByMap(Class.forName(contextManager.pathForClass(className)), map);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	public Boolean insertByMap(Class<?> c, Map<String, Object> map) {
 		em = emf.createEntityManager();
 		tx = em.getTransaction();
@@ -108,16 +109,20 @@ public class EntityDataService {
 						break;
 					}
 				}
+				if (method == null) {
+					break;
+				}
 
 				method.invoke(o, val);
 				
-				em.persist(o);
 				/*
 				if (inv != null)
 					em.persist(inv);
 				*/
 				//TODO:Decouple
 			}
+			em.persist(o);
+
 			System.out.println("Object have been persisted");
 		} catch (Exception e) {
 			NucleusLogger.GENERAL.error(">> Exception persisting data", e);
@@ -132,6 +137,18 @@ public class EntityDataService {
 		System.out.println("");
 		return true;
 	}
+	
+	
+	public Object updateByMap(String className, Object id, Map<String, Object> map) {
+		try {
+			return updateByMap(Class.forName(contextManager.pathForClass(className)), id, map);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 
 	public Object updateByMap(Class c, Object id, Map<String, Object> m) {
 		// Perform some update operations
@@ -186,6 +203,16 @@ public class EntityDataService {
 		return o;
 	}
 
+	public Object delById(String className, Object id) {
+		try {
+			return delById(Class.forName(contextManager.pathForClass(className)), id);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	public Boolean delById(Class c, Object id) {
 		// Perform some delete operations
 		em = emf.createEntityManager();
@@ -214,6 +241,16 @@ public class EntityDataService {
 		}
 		System.out.println("");
 		return false;
+	}
+
+	public Object getById(String className, Object id) {
+		try {
+			return getById(Class.forName(contextManager.pathForClass(className)), id);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	public Object getById(Class c, Object id) {
@@ -245,6 +282,16 @@ public class EntityDataService {
 		return null;
 	}
 	
+	public Object getByCondition(String className, Map<String, Object> map) {
+		try {
+			return getById(Class.forName(contextManager.pathForClass(className)), map);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 	
 	public List getByCondition(Class c, Map<String, Object> map) {
 		EntityManager em = emf.createEntityManager(); 
@@ -298,9 +345,11 @@ public class EntityDataService {
 		return results;
 	}
 
-	private static String getMethodName(String fildeName) throws Exception {
-		byte[] items = fildeName.getBytes();
-		items[0] = (byte) ((char) items[0] - 'a' + 'A');
-		return new String(items);
+	public static String stringByUpperTheFirstChar(String fildeName) {
+		return fildeName.substring(0, 1).toUpperCase() + fildeName.substring(1);
+	}
+	
+	public static String stringByLowerTheFirstChar(String fildeName) {
+		return fildeName.substring(0, 1).toLowerCase() + fildeName.substring(1);
 	}
 };

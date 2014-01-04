@@ -51,7 +51,7 @@ public class ContextManager {
 					if (classPath.contains(".")) {
 						String[] components = classPath.split("\\.");
 						String className = components[components.length - 1];
-						classMap.put(className, classPath);
+						classMap.put(EntityDataService.stringByUpperTheFirstChar(className), classPath);
 					}
 				}
 			
@@ -61,15 +61,12 @@ public class ContextManager {
 			e.printStackTrace();
 			return;
 		}
-		
-		//get tableName and className for bean
-		//default classname is same with tablename
-
 	}
 
 	public String pathForClass(String className) {
-		if (classMap.containsKey(className)) {
-			return classMap.get(className);
+		String cm = EntityDataService.stringByUpperTheFirstChar(className);
+		if (classMap.containsKey(cm)) {
+			return classMap.get(cm);
 		} else {
 			return null;
 		}
