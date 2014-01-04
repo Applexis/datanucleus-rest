@@ -27,6 +27,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+import cn.edu.sjtu.se.dclab.cloud.dataaccessor.entityservice.EntityDataService;
 import cn.edu.sjtu.se.dclab.cloud.sample.warrantydemo.mysql.User;
 import cn.edu.sjtu.se.dclab.cloud.sample.warrantydemo.mysql.Warranty;
 
@@ -38,53 +39,8 @@ public class Main
 {
     public static void main(String args[])
     {
-        // Create an EntityManagerFactory for this "persistence-unit"
-        // See the file "META-INF/persistence.xml"
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("Tutorial");
-
-        System.out.println("DataNucleus Tutorial with JPA");
-        System.out.println("=============================");
-
-        // Persistence of a Product and a Book.
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        try
-        {
-            tx.begin();
-            
-            Warranty w = new Warranty();
-            w.setDueTime(new Timestamp(10000000));
-            w.setProductSerial("serial1");
-            w.setStartTime(new Timestamp(99999999));
-            w.setStatus(0);
-            cn.edu.sjtu.se.dclab.cloud.sample.warrantydemo.mysql.Product p = new cn.edu.sjtu.se.dclab.cloud.sample.warrantydemo.mysql.Product();
-            p.setManufacturer("manufact1");
-            p.setName("Product name");
-            
-            User u = new User();
-            u.setAddress("sjtu");
-            u.setCompany("com1");
-            u.setTel("1234123");
-            
-            w.setProduct(p);
-            w.setUser(u);
-            
-            em.persist(w);
-
-            tx.commit();
-            System.out.println("Product and Book have been persisted");
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            em.close();
-        }
-        System.out.println("");
-        return;
-        /*
+    	EntityDataService eds = new EntityDataService();
+    	/*
         // Perform a retrieve of the Inventory and detach it (by closing the EM)
         em = emf.createEntityManager();
         tx = em.getTransaction();
