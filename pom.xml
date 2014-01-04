@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.datanucleus.samples</groupId>
     <artifactId>datanucleus-samples-jpa-tutorial</artifactId>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <version>3.2</version>
     <name>DataNucleus Tutorial for JPA</name>
     <url>http://www.datanucleus.org</url>
