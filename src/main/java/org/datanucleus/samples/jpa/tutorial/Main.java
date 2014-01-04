@@ -17,6 +17,7 @@ Contributors:
 **********************************************************************/
 package org.datanucleus.samples.jpa.tutorial;
 
+import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,6 +26,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+
+import cn.edu.sjtu.se.dclab.cloud.sample.warrantydemo.mysql.User;
+import cn.edu.sjtu.se.dclab.cloud.sample.warrantydemo.mysql.Warranty;
 
 /**
  * Controlling application for the DataNucleus Tutorial using JPA.
@@ -47,15 +51,25 @@ public class Main
         try
         {
             tx.begin();
-
-            Inventory inv = new Inventory("My Inventory");
-            Product product = new Product("Sony Discman", "A standard discman from Sony", 200.00);
-            inv.getProducts().add(product);
-            Book book = new Book("Lord of the Rings by Tolkien", "The classic story", 49.99, "JRR Tolkien", 
-                "12345678", "MyBooks Factory");
-            inv.getProducts().add(book);
-
-            em.persist(inv);
+            
+            Warranty w = new Warranty();
+            w.setDueTime(new Timestamp(10000000));
+            w.setProductSerial("serial1");
+            w.setStartTime(new Timestamp(99999999));
+            w.setStatus(0);
+            cn.edu.sjtu.se.dclab.cloud.sample.warrantydemo.mysql.Product p = new cn.edu.sjtu.se.dclab.cloud.sample.warrantydemo.mysql.Product();
+            p.setManufacturer("manufact1");
+            p.setName("Product name");
+            
+            User u = new User();
+            u.setAddress("sjtu");
+            u.setCompany("com1");
+            u.setTel("1234123");
+            
+            w.setProduct(p);
+            w.setUser(u);
+            
+            em.persist(w);
 
             tx.commit();
             System.out.println("Product and Book have been persisted");
@@ -69,7 +83,8 @@ public class Main
             em.close();
         }
         System.out.println("");
-
+        return;
+        /*
         // Perform a retrieve of the Inventory and detach it (by closing the EM)
         em = emf.createEntityManager();
         tx = em.getTransaction();
@@ -180,6 +195,6 @@ public class Main
         }
 
         System.out.println("");
-        System.out.println("End of Tutorial");
+        System.out.println("End of Tutorial");*/
     }
 }

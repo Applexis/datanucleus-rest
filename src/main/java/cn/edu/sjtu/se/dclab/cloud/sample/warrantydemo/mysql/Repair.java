@@ -2,6 +2,8 @@
 
 package cn.edu.sjtu.se.dclab.cloud.sample.warrantydemo.mysql;
 
+import javax.persistence.JoinColumn;
+
 @javax.persistence.Entity
 @javax.persistence.Table(name = "Repair")
 public class Repair {

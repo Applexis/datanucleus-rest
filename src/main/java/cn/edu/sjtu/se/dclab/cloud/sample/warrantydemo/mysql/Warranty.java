@@ -2,6 +2,9 @@
 
 package cn.edu.sjtu.se.dclab.cloud.sample.warrantydemo.mysql;
 
+import javax.persistence.CascadeType;
+import javax.persistence.ManyToOne;
+
 @javax.persistence.Entity
 @javax.persistence.Table(name = "Warranty")
 public class Warranty {
@@ -58,7 +61,8 @@ public class Warranty {
 	
 	
 	private User User;
-
+	
+    @ManyToOne(cascade={CascadeType.ALL})
 	@javax.persistence.JoinColumn(name = "User")
 	public User getUser(){
 		return User;
@@ -69,6 +73,7 @@ public class Warranty {
 	}  
 	private Product Product;
 
+    @ManyToOne(cascade={CascadeType.ALL})
 	@javax.persistence.JoinColumn(name = "Product")
 	public Product getProduct(){
 		return Product;
