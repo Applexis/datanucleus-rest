@@ -18,7 +18,9 @@ Contributors:
 package org.datanucleus.samples.jpa.tutorial;
 
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * Definition of a Book. Extends basic Product class.
@@ -26,18 +28,22 @@ import javax.persistence.Entity;
  * @version $Revision: 1.2 $
  **/
 @Entity
+@Table(name = "JS_Book")
 public class Book extends Product
 {
     /** Author of the Book. */
     @Basic
+    @Column(name = "author", nullable = false, length = 20)
     protected String author = null;
 
     /** ISBN number of the book. */
     @Basic
+    @Column(name = "isbn", nullable = false, length = 40)
     protected String isbn = null;
 
     /** Publisher of the Book. */
     @Basic
+    @Column(name = "publisher", nullable = false, length = 40)
     protected String publisher = null;
 
     /**

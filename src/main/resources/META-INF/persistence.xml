@@ -5,9 +5,10 @@
 
     <!-- Tutorial "unit" -->
     <persistence-unit name="Tutorial">
-        <class>org.datanucleus.samples.jpa.tutorial.Inventory</class>
-        <class>org.datanucleus.samples.jpa.tutorial.Product</class>
-        <class>org.datanucleus.samples.jpa.tutorial.Book</class>
+		<class>cn.edu.sjtu.se.dclab.cloud.sample.warrantydemo.mysql.User</class>
+		<class>cn.edu.sjtu.se.dclab.cloud.sample.warrantydemo.mysql.Repair</class>
+		<class>cn.edu.sjtu.se.dclab.cloud.sample.warrantydemo.mysql.Warranty</class>
+		<class>cn.edu.sjtu.se.dclab.cloud.sample.warrantydemo.mysql.Product</class>
         <exclude-unlisted-classes/>
 
         <properties>

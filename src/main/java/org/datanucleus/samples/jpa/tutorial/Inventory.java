@@ -21,20 +21,30 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  * Definition of an Inventory of products.
  */
 @Entity
+@Table(name = "JS_Inventory")
 public class Inventory
 {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "name", nullable = false, length = 40)
     protected String name=null;
 
-    @OneToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH})
+    @OneToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH}, mappedBy="inventory", fetch = FetchType.LAZY)
     protected Set<Product> products = new HashSet<Product>();
 
     public Inventory(String name)
@@ -56,4 +66,12 @@ public class Inventory
     {
         return "Inventory : " + name;
     }
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 }

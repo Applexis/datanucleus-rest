@@ -18,11 +18,17 @@ Contributors:
 package org.datanucleus.samples.jpa.tutorial;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * Definition of a Product
@@ -32,24 +38,32 @@ import javax.persistence.InheritanceType;
  **/
 @Entity
 @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
+@Table(name = "JS_Product")
 public class Product
 {
     /** Id for the product. */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
 
     /** Name of the Product. */
     @Basic
+    @Column(name = "name", nullable = false, length = 100)
     protected String name=null;
 
     /** Description of the Product. */
     @Basic
+    @Column(name = "description", nullable = false, length = 256)
     protected String description=null;
 
     /** Price of the Product. */
     @Basic
-    @Column (name="THE_PRICE")
+    @Column (name="price")
     protected double price=0.0;
+    
+    @ManyToOne(cascade={CascadeType.REFRESH})
+	@JoinColumn(name = "inv_id")
+    protected Inventory inventory;
 
     /**
      * Default constructor. 
@@ -138,4 +152,12 @@ public class Product
     {
         return "Product : " + name + " [" + description + "]";
     }
+
+	public Inventory getInventory() {
+		return inventory;
+	}
+
+	public void setInventory(Inventory inventory) {
+		this.inventory = inventory;
+	}
 }
