@@ -11,9 +11,11 @@ import cn.edu.sjtu.se.dclab.cloud.dataaccessor.entityservice.*;
 
 public class ResourcePoolProcessorImpl implements ResoucePoolProcessor {
 
-	EntityDataService eds = new EntityDataService();
+	EntityDataService eds;
 	
-
+	public ResourcePoolProcessorImpl() {
+		eds = new EntityDataService();
+	}
 	public Object insert(String type, MultivaluedMap<String, String> params)
 			throws Exception {
 		return eds.insertByMap(type, mapByMultiValueMap(params));
@@ -31,12 +33,12 @@ public class ResourcePoolProcessorImpl implements ResoucePoolProcessor {
 
 	public Object get(String type, Long id) throws Exception {
 		System.out.println(fullClassNameForType(type));
-		return eds.getById(Class.forName(fullClassNameForType(type)), id);
+		return eds.getById(type, id);
 	}
 
 	public Object update(String type, Long id,
 			MultivaluedMap<String, String> params) throws Exception {
-		return eds.updateByMap(Class.forName(fullClassNameForType(type)), id, mapByMultiValueMap(params));
+		return eds.updateByMap(type, id, mapByMultiValueMap(params));
 	}
 	
 	private Map<String, Object> mapByMultiValueMap(MultivaluedMap<String, String> mm) {

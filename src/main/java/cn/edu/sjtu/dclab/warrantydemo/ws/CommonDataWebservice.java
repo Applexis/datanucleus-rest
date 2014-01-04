@@ -28,7 +28,7 @@ public class CommonDataWebservice {
 	private static CommonDataWebservice instance;
 	
 	private CommonDataWebservice() {
-		//this.resourcePoolProcessor = new ResourcePoolProcessorImpl();
+		this.resourcePoolProcessor = new ResourcePoolProcessorImpl();
 	}
 	
 	public static CommonDataWebservice getInstance() {
