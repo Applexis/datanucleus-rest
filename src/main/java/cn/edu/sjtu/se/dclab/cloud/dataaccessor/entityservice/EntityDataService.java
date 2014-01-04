@@ -203,7 +203,7 @@ public class EntityDataService {
 		return o;
 	}
 
-	public Object delById(String className, Object id) {
+	public Boolean delById(String className, Object id) {
 		try {
 			return delById(Class.forName(contextManager.pathForClass(className)), id);
 		} catch (ClassNotFoundException e) {
@@ -282,13 +282,13 @@ public class EntityDataService {
 		return null;
 	}
 	
-	public Object getByCondition(String className, Map<String, Object> map) {
+	public List getByCondition(String className, Map<String, Object> map) {
 		try {
-			return getById(Class.forName(contextManager.pathForClass(className)), map);
+			return getByCondition(Class.forName(contextManager.pathForClass(className)), map);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 	}
 
