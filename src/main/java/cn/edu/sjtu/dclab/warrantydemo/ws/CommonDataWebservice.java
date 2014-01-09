@@ -188,9 +188,9 @@ public class CommonDataWebservice {
 		return resourceType.substring(0,1).toUpperCase() + resourceType.substring(1).toLowerCase();
 	}
 	
-	private static Object toJson(Object o) {
+	private static Object toJson(Object o) throws JSONException {
 		if (o == null) {
-			return null;
+			return exceptionObject("obj not found");
 		}
 	
 		if (Collection.class.isInstance(o) || o.getClass().isArray()) {
@@ -209,7 +209,7 @@ public class CommonDataWebservice {
 		return cm.pathForClass(resource) != null;
 	}
 	
-	private JSONObject exceptionObject(String msg) throws JSONException {
+	private static JSONObject exceptionObject(String msg) throws JSONException {
 		JSONObject obj = new JSONObject();
 		obj.put("status", "exception");
 		if (msg != null) {
