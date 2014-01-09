@@ -8,6 +8,8 @@ import org.apache.wink.server.handlers.HandlersFactory;
 import org.apache.wink.server.handlers.RequestHandler;
 import org.apache.wink.server.handlers.ResponseHandler;
 
+import com.sun.xml.bind.v2.model.core.ErrorHandler;
+
 public class ResourcePoolHandlersFactory extends HandlersFactory {
 
 	public List<? extends ResponseHandler> getErrorHandlers() {

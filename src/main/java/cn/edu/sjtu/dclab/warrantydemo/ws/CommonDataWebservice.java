@@ -1,5 +1,6 @@
 package cn.edu.sjtu.dclab.warrantydemo.ws;
 
+import java.awt.color.CMMException;
 import java.util.Collection;
 import java.util.List;
 
@@ -16,15 +17,17 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.wink.server.utils.LinkBuilders;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import cn.edu.sjtu.dclab.warrantydemo.services.*;
+import cn.edu.sjtu.se.dclab.cloud.dataaccessor.entityservice.ContextManager;
 
 @Path("/service")
 public class CommonDataWebservice {
-	
+
 	private static CommonDataWebservice instance;
 	
 	private CommonDataWebservice() {
@@ -37,7 +40,7 @@ public class CommonDataWebservice {
 		}
 		return instance;
 	}
-	
+		
 	private ResoucePoolProcessor resourcePoolProcessor;
 
 	public void setResourcePoolProcessor(
@@ -63,10 +66,19 @@ public class CommonDataWebservice {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public JSONObject get(
 			@PathParam(value = "resourceType") String resourceType,
-			@PathParam(value = "resourceId") Long resourceId)
-			throws Exception {
+			@PathParam(value = "resourceId") Long resourceId) throws JSONException
+			 {
 		
-		Object result = resourcePoolProcessor.get(resourceType, resourceId);
+		if (!resourceExists(resourceType)) {
+			return exceptionObject(null);
+		}
+		Object result;
+		try {
+			result = resourcePoolProcessor.get(resourceType, resourceId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return exceptionObject(e.getMessage());
+		}
 		return (JSONObject)toJson(result);
 	}
 	
@@ -75,13 +87,24 @@ public class CommonDataWebservice {
 	@GET
 	//@Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
 	@Produces({ MediaType.APPLICATION_JSON })
-	public JSONArray list(
+	public Object list(
 			@PathParam(value = "resourceType") String resourceType,
-			@Context UriInfo uriInfo) throws Exception {
+			@Context UriInfo uriInfo) throws JSONException  {
+		
+		if (!resourceExists(resourceType)) {
+			return exceptionObject(null);
+		}
+
 		MultivaluedMap<String, String> formParams = uriInfo
 				.getQueryParameters();
 
-		List<Object> result = resourcePoolProcessor.list(resourceType, formParams);
+		List<Object> result;
+		try {
+			result = resourcePoolProcessor.list(resourceType, formParams);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return exceptionObject(e.getMessage());
+		}
 
 		return (JSONArray)toJson(result);
 	}
@@ -93,9 +116,19 @@ public class CommonDataWebservice {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public JSONObject create(
 			@PathParam(value = "resourceType") String resourceType,
-			MultivaluedMap<String, String> formParams) throws Exception {
+			MultivaluedMap<String, String> formParams) throws JSONException  {
+		
+		if (!resourceExists(resourceType)) {
+			return exceptionObject(null);
+		}
 
-		Object result = resourcePoolProcessor.insert(resourceType, formParams);
+		Object result;
+		try {
+			result = resourcePoolProcessor.insert(resourceType, formParams);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return exceptionObject(e.getMessage());
+		}
 
 		return (JSONObject)toJson(result);
 	}
@@ -108,10 +141,20 @@ public class CommonDataWebservice {
 	public JSONObject update(
 			@PathParam(value = "resourceType") String resourceType,
 			@PathParam(value = "resourceId") Long resourceId,
-			MultivaluedMap<String, String> formParams) throws Exception {
+			MultivaluedMap<String, String> formParams) throws JSONException {
+		
+		if (!resourceExists(resourceType)) {
+			return exceptionObject(null);
+		}
 
-		Object result = resourcePoolProcessor.update(resourceType, resourceId,
-				formParams);
+		Object result;
+		try {
+			result = resourcePoolProcessor.update(resourceType, resourceId,
+					formParams);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return exceptionObject(e.getMessage());
+		}
 
 		return (JSONObject)toJson(result);
 	}
@@ -123,10 +166,19 @@ public class CommonDataWebservice {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public JSONObject delete(
 			@PathParam(value = "resourceType") String resourceType,
-			@PathParam(value = "resourceId") Long resourceId)
-			throws Exception {
+			@PathParam(value = "resourceId") Long resourceId) throws JSONException
+			  {
+		if (!resourceExists(resourceType)) {
+			return exceptionObject(null);
+		}
 
-		Boolean result = resourcePoolProcessor.delete(resourceType, resourceId);
+		Boolean result;
+		try {
+			result = resourcePoolProcessor.delete(resourceType, resourceId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return exceptionObject(e.getMessage());
+		}
 
 		return (JSONObject)toJson(result);
 	}
@@ -150,5 +202,19 @@ public class CommonDataWebservice {
 			JSONObject jo = new JSONObject(joo);
 			return jo;
 		}		
+	}
+	
+	private boolean resourceExists(String resource) {
+		ContextManager cm = new ContextManager();
+		return cm.pathForClass(resource) != null;
+	}
+	
+	private JSONObject exceptionObject(String msg) throws JSONException {
+		JSONObject obj = new JSONObject();
+		obj.put("status", "exception");
+		if (msg != null) {
+			obj.put("message", msg);
+		}
+		return obj;
 	}
 }

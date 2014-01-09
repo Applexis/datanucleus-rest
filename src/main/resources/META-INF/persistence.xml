@@ -6,7 +6,6 @@
 
 	<!-- Tutorial "unit" -->
 	<persistence-unit name="Tutorial">
-		<provider>org.datanucleus.api.jpa.PersistenceProviderImpl</provider>
 		<class>cn.edu.sjtu.se.dclab.cloud.sample.warrantydemo.mysql.User</class>
 		<class>cn.edu.sjtu.se.dclab.cloud.sample.warrantydemo.mysql.Repair</class>
 		<class>cn.edu.sjtu.se.dclab.cloud.sample.warrantydemo.mysql.Warranty</class>
